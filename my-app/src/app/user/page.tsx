@@ -1,9 +1,10 @@
+import CreateUser from "@/src/components/createuser/CreateUser";
 import React from "react";
 
 const User = () => {
   return (
     <div>
-      <h1>User</h1>
+      <CreateUser />
     </div>
   );
 };

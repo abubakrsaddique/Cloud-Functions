@@ -1,4 +1,3 @@
-// pages/api/updateEmail.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { auth } from "@/Firebase";
 import {
