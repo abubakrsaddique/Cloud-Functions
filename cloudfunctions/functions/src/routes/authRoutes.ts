@@ -1,5 +1,6 @@
 import * as express from "express";
 import { admin } from "../getFirebase";
+import { getAuth } from "firebase-admin/auth";
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.post("/signup", async (req: express.Request, res: express.Response) => {
       firstName,
       lastName,
       email,
+      role: "Admin",
     });
     res.status(201).send("User created");
   } catch (error) {
@@ -21,9 +23,13 @@ router.post("/signup", async (req: express.Request, res: express.Response) => {
 });
 
 // Login route
+
 router.post("/login", async (req: express.Request, res: express.Response) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
   try {
+    const auth = getAuth();
+    await signInWithEmailAndPassword(auth, email, password);
+
     const user = await admin.auth().getUserByEmail(email);
     const token = await admin.auth().createCustomToken(user.uid);
     res.status(200).json({ token });
@@ -34,3 +40,6 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
 });
 
 export default router;
+function signInWithEmailAndPassword(auth: any, email: any, password: any) {
+  throw new Error("Function not implemented.");
+}
