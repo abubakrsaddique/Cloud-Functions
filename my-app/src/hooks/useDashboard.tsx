@@ -17,9 +17,13 @@ export function useDashboard() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newEmail, setNewEmail] = useState(formData.email || "");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (userData) setFormData(userData);
+    if (userData) {
+      setFormData(userData);
+      setIsAdmin(userData.role === "admin");
+    }
   }, [userData]);
 
   const handleEdit = () => setEditMode(true);
@@ -90,6 +94,7 @@ export function useDashboard() {
     currentPassword,
     newPassword,
     newEmail,
+    isAdmin,
     setFormData,
     setCurrentPassword,
     setNewPassword,

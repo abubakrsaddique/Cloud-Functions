@@ -27,13 +27,12 @@ const NewUserData = () => {
         </h2>
       </div>
       <div className="py-4">
-        {" "}
         <ul>
           {isUsersLoading ? (
             <div>Loading users....</div>
           ) : (
             usersCreatedByAdmin.map((user: any) => (
-              <li key={user.id}>
+              <li key={userData.id} className="py-5">
                 <div>
                   <label>First Name :</label>
                   {user.firstname}
@@ -53,6 +52,11 @@ const NewUserData = () => {
                   {" "}
                   <label>Password :</label>
                   {user.password}
+                </div>
+                <div className="flex py-4">
+                  <button className="bg-red-400 text-white px-7 py-4 rounded-lg">
+                    Edit
+                  </button>
                 </div>
               </li>
             ))

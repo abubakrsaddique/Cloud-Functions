@@ -66,24 +66,33 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
   console.log("CreateUser controller hit");
-  const { firstname, lastname, email, password }: User = req.body;
+  const { firstname, lastname, email, password, adminId }: User = req.body;
 
-  if (!firstname || !lastname || !email || !password) {
-    return res.status(400).send("Name, email, and password are required");
+  if (!firstname || !lastname || !email || !password || !adminId) {
+    return res
+      .status(400)
+      .send("Name, email, password, and adminId are required");
   }
 
   try {
-    const docRef = admin.firestore().collection("users").doc();
-    await docRef.set({
+    const user = await admin.auth().createUser({
+      email,
+      password,
+      displayName: `${firstname} ${lastname}`,
+    });
+
+    await admin.firestore().collection("users").doc(user.uid).set({
       firstname,
       lastname,
       email,
       password,
+      adminId,
+      role: "User",
     });
 
-    return res.status(200).send("Document successfully written!");
+    return res.status(200).send("User successfully created!");
   } catch (error) {
-    console.error("Error writing document: ", error);
-    return res.status(500).send("Error writing document");
+    console.error("Error creating user: ", error);
+    return res.status(500).send("Error creating user");
   }
 };

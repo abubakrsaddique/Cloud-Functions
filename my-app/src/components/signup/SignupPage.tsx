@@ -28,6 +28,7 @@ const signup = async (user: User): Promise<void> => {
       lastName,
       email,
       password,
+      role: "Admin",
     });
   }
 };

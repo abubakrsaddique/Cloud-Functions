@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { firestore, auth } from "@/Firebase";
 
@@ -13,28 +17,32 @@ const createUser = async (userData: {
   lastname: string;
   email: string;
   password: string;
+  role: "User";
 }) => {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const token = await user.getIdToken();
+
   const response = await fetch(
     "http://localhost:5001/functions-9db42/us-central1/api/user/create",
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(userData),
+      body: JSON.stringify({
+        ...userData,
+        adminId: user.uid,
+      }),
     }
   );
 
   if (!response.ok) {
     throw new Error("Failed to create user");
-  }
-
-  const user = auth.currentUser;
-  if (user) {
-    await addDoc(collection(firestore, "users"), {
-      ...userData,
-      adminId: user.uid,
-    });
   }
 };
 
@@ -63,7 +71,7 @@ const UserForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleCreateUser({ firstname, lastname, email, password });
+    handleCreateUser({ firstname, lastname, email, password, role: "User" });
   };
 
   return (
