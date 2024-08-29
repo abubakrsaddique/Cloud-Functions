@@ -126,7 +126,7 @@ export default function Sidebar({
           Delete Account
         </p>
         {isAdmin && (
-          <Link href="/user-detail">
+          <Link href="/users-detail">
             <p className="hover:bg-gray-700 p-2 rounded">Users</p>
           </Link>
         )}
