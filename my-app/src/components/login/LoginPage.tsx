@@ -9,42 +9,56 @@ import {
   UserCredential,
 } from "firebase/auth";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FaSpinner } from "react-icons/fa";
+import { toast } from "react-toastify";
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z.string().min(6, { message: "Wrong Password " }),
+});
+
+type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const login = async ({
   email,
   password,
-}: {
-  email: string;
-  password: string;
-}): Promise<UserCredential> => {
+}: LoginFormInputs): Promise<UserCredential> => {
   const authInstance = getAuth();
   return await signInWithEmailAndPassword(authInstance, email, password);
 };
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const mutation = useMutation<
+  const { mutate, isError } = useMutation<
     UserCredential,
     Error,
-    { email: string; password: string }
+    LoginFormInputs
   >({
     mutationFn: login,
     onSuccess: () => {
+      toast.success("Login successful! ");
       router.push("/dashboard");
     },
     onError: () => {
-      alert("Login failed. Please check your credentials.");
+      toast.error("Login failed. Please check your credentials.");
     },
   });
 
-  const { mutate, isError } = mutation;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormInputs>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutate({ email, password });
+  const onSubmit = async (data: LoginFormInputs) => {
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+    mutate(data);
   };
 
   return (
@@ -53,23 +67,27 @@ export default function LoginPage() {
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
           Login
         </h1>
-        <form onSubmit={handleSubmit} className="flex flex-col">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <input
-            required
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
             className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mb-4">{errors.email.message}</p>
+          )}
           <input
-            required
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.password.message}
+            </p>
+          )}
           <p className="text-sm text-gray-600 mb-4">
             <a href="#" className="underline">
               Forgot password?
@@ -77,9 +95,12 @@ export default function LoginPage() {
           </p>
           <button
             type="submit"
-            className="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300"
+            className={`bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300 flex items-center justify-center ${
+              isSubmitting ? "cursor-not-allowed" : ""
+            }`}
+            disabled={isSubmitting}
           >
-            Login
+            {isSubmitting ? <FaSpinner className="animate-spin " /> : "Login"}
           </button>
           {isError && (
             <p className="text-red-500 mt-2 text-center">

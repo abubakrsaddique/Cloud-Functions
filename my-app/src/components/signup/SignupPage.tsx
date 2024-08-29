@@ -1,21 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { auth, firestore } from "@/Firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
+import { FaSpinner } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+const signupSchema = z.object({
+  firstName: z.string().min(6, "First name must be at least  characters long"),
+  lastName: z.string().min(4, "Last name must be at least 4 characters long"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
 
-const signup = async (user: User): Promise<void> => {
+type SignupSchema = z.infer<typeof signupSchema>;
+
+const signup = async (user: SignupSchema): Promise<void> => {
   const { firstName, lastName, email, password } = user;
   const userCredential = await createUserWithEmailAndPassword(
     auth,
@@ -35,26 +41,33 @@ const signup = async (user: User): Promise<void> => {
 };
 
 export default function SignupPage() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const mutation = useMutation<void, Error, User>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<SignupSchema>({
+    resolver: zodResolver(signupSchema),
+  });
+
+  const mutation = useMutation<void, Error, SignupSchema>({
     mutationFn: signup,
     onSuccess: () => {
+      toast.success("Signup successful! ");
       router.push("/dashboard");
-      console.log("Signup successful");
     },
     onError: (error) => {
-      console.error("Signup error:", error);
+      toast.error("Signup failed...!");
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutation.mutate({ firstName, lastName, email, password });
+  const onSubmit = async (data: SignupSchema) => {
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    mutation.mutate(data);
+    reset;
   };
 
   return (
@@ -63,39 +76,47 @@ export default function SignupPage() {
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
           Sign Up
         </h1>
-        <form onSubmit={handleSubmit} className="flex flex-col">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <input
-            required
             type="text"
             placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            {...register("firstName")}
             className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {errors.firstName && (
+            <p className="text-red-600">{errors.firstName.message}</p>
+          )}
+
           <input
-            required
             type="text"
             placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            {...register("lastName")}
             className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {errors.lastName && (
+            <p className="text-red-600">{errors.lastName.message}</p>
+          )}
+
           <input
-            required
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
             className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {errors.email && (
+            <p className="text-red-600">{errors.email.message}</p>
+          )}
+
           <input
-            required
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {errors.password && (
+            <p className="text-red-600">{errors.password.message}</p>
+          )}
+
           <p className="text-sm text-gray-600 mb-4">
             Already have an account?{" "}
             <Link href="/login">
@@ -105,10 +126,15 @@ export default function SignupPage() {
             </Link>
           </p>
           <button
+            disabled={isSubmitting}
             type="submit"
-            className="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg w-full hover:bg-blue-600 transition duration-300"
+            className="bg-blue-500 items-center justify-center text-white font-bold py-3 px-6 rounded-lg w-full hover:bg-blue-600 transition duration-300"
           >
-            Sign Up
+            {isSubmitting ? (
+              <FaSpinner className="animate-spin mr-2" />
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
         <div className="absolute top-4 left-4 flex items-center">
