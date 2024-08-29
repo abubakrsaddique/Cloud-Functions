@@ -14,17 +14,17 @@ The repo provide a complete detail about this project. I have created this proje
 
 ## Implementation Details
 
-## • Frontend:
+### • Frontend
 
-            I utilized Next.js for rapid rendering, TypeScript for enhanced reliability, Tailwind CSS for efficient UI development
+I utilized Next.js for rapid rendering, TypeScript for enhanced reliability, and Tailwind CSS for efficient UI development.
 
-## • Authentication and Data Management:
+### • Authentication and Data Management
 
-            Firebase played a crucial role in authentication, data management, file storage, and real-time updates.
+Firebase played a crucial role in authentication, data management, file storage, and real-time updates.
 
-## • Back-end:
+### • Backend
 
-            Node.js and Express were integrated with Firebase Cloud Functions for API development and server-side logic.
+Node.js and Express were integrated with Firebase Cloud Functions for API development and server-side logic.
 
 ## Installation
 
