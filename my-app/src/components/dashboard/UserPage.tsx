@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboard } from "@/src/hooks/useDashboard";
+import Sidebar from "../sidebar/Sidebar";
 
 export default function UserPage() {
   const {
@@ -32,137 +33,136 @@ export default function UserPage() {
     return <div>Error fetching user data: {fetchError.message}</div>;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl mb-4">Dashboard</h1>
+    <div className="flex min-h-screen">
+      <Sidebar
+        handleEdit={handleEdit}
+        handleEditPassword={handleEditPassword}
+        handleEditEmail={handleEditEmail}
+        handleDeleteAccount={handleDeleteAccount}
+      />
+      <main className="flex-1 p-6">
+        <h1 className="text-3xl font-bold mb-6">User Dashboard</h1>
 
-      <div className="mb-4">
-        <div>
-          <label>First Name:</label>
-          {editMode ? (
-            <input
-              type="text"
-              value={formData.firstname}
-              onChange={(e) =>
-                setFormData({ ...formData, firstname: e.target.value })
-              }
-              className="block w-full mb-2 p-2 border rounded"
-            />
-          ) : (
-            formData.firstname
-          )}
-        </div>
-        <div>
-          <label>Last Name:</label>{" "}
-          {editMode ? (
-            <input
-              type="text"
-              value={formData.lastname}
-              onChange={(e) =>
-                setFormData({ ...formData, lastname: e.target.value })
-              }
-              className="block w-full mb-2 p-2 border rounded"
-            />
-          ) : (
-            formData.lastname
-          )}
-        </div>
+        <div className="space-y-6">
+          <div className="bg-white p-4 shadow rounded-md">
+            <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
 
-        <div>
-          <label>Email:</label>
-          {formData.email}
-          <div>
-            <label>Password:</label>
-            {formData.password}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-lg font-medium mb-1">
+                  First Name:
+                </label>
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={formData.firstname}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstname: e.target.value })
+                    }
+                    className="block w-full p-2 border rounded-md"
+                  />
+                ) : (
+                  <p className="text-base">{formData.firstname}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-lg font-medium mb-1">
+                  Last Name:
+                </label>
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={formData.lastname}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastname: e.target.value })
+                    }
+                    className="block w-full p-2 border rounded-md"
+                  />
+                ) : (
+                  <p className="text-base">{formData.lastname}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-lg font-medium mb-1">Email:</label>
+                {emailEditMode ? (
+                  <div>
+                    <input
+                      type="email"
+                      value={formData.email}
+                      className="block w-full mb-2 p-2 border rounded-md"
+                      readOnly
+                    />
+                    <input
+                      type="email"
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      className="block w-full mb-2 p-2 border rounded-md"
+                    />
+                    <input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Current Password"
+                      className="block w-full mb-2 p-2 border rounded-md"
+                    />
+                    <button
+                      onClick={handleSaveEmail}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                    >
+                      Save Email
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-base">{formData.email}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-lg font-medium mb-1">
+                  Password:
+                </label>
+                {passwordEditMode ? (
+                  <div>
+                    <input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Current Password"
+                      className="block w-full mb-2 p-2 border rounded-md"
+                    />
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="New Password"
+                      className="block w-full mb-2 p-2 border rounded-md"
+                    />
+                    <button
+                      onClick={handleSavePassword}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                    >
+                      Save Password
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-base">{formData.password}</p>
+                )}
+              </div>
+
+              {editMode && (
+                <button
+                  onClick={handleSave}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                >
+                  Save Changes
+                </button>
+              )}
+            </div>
           </div>
-          {emailEditMode ? (
-            <div>
-              <input
-                type="email"
-                value={formData.email}
-                className="block w-full mb-2 p-2 border rounded"
-                readOnly
-              />
-              <input
-                type="email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                className="block w-full mb-2 p-2 border rounded"
-              />
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Current Password"
-                className="block w-full mb-2 p-2 border rounded"
-              />
-              <button
-                onClick={handleSaveEmail}
-                className="bg-blue-800 px-4 py-4 rounded-lg"
-              >
-                Save Email
-              </button>
-            </div>
-          ) : passwordEditMode ? (
-            <div>
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Current Password"
-                className="block w-full mb-2 p-2 border rounded"
-              />
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="New Password"
-                className="block w-full mb-2 p-2 border rounded"
-              />
-              <button
-                onClick={handleSavePassword}
-                className="bg-blue-800 px-4 py-4 rounded-lg"
-              >
-                Save Password
-              </button>
-            </div>
-          ) : (
-            <div className="flex gap-5 px-4 py-4 cursor-pointer ">
-              <button
-                onClick={handleEdit}
-                className="bg-red-400 px-4 py-4 rounded-lg"
-              >
-                Edit Profile
-              </button>
-              <button
-                onClick={handleEditPassword}
-                className="bg-red-400 px-4 py-4 rounded-lg"
-              >
-                Edit Password
-              </button>
-              <button
-                onClick={handleEditEmail}
-                className="bg-red-400 px-4 py-4 rounded-lg"
-              >
-                Edit Email
-              </button>
-              <button
-                onClick={handleDeleteAccount}
-                className="bg-red-400 px-4 py-4 rounded-lg"
-              >
-                Delete Account
-              </button>
-            </div>
-          )}
-          {editMode && (
-            <button
-              onClick={handleSave}
-              className="bg-blue-800 px-4 py-4 rounded-lg"
-            >
-              Save Changes
-            </button>
-          )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

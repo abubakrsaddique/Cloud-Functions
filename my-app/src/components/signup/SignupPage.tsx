@@ -58,91 +58,86 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen h-full w-full background">
-      <div className="flex flex-row justify-center items-center h-[100%]">
-        <div className="relative w-[70%] ">
-          <div className="flex h-full w-full items-center justify-center py-6">
-            <form onSubmit={handleSubmit} className="flex flex-col">
-              <p className="mb-8 text-3xl font-bold text-[rgb(48,42,37)]">
-                Signup
-              </p>
-              <input
-                required
-                type="text"
-                placeholder="First Name"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="mb-3 w-[400px] rounded-3xl px-6 py-4 text-sm font-medium leading-4 outline-black "
-              />
-              <input
-                required
-                type="text"
-                placeholder="Last Name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="mb-3 w-[400px] rounded-3xl px-6 py-4 text-sm font-medium leading-4 outline-black "
-              />
-              <input
-                required
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mb-3 w-[400px] rounded-3xl px-6 py-4 text-sm font-medium leading-4 outline-black "
-              />
-              <input
-                required
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mb-3 w-[400px] rounded-3xl px-6 py-4 text-sm font-medium leading-4 outline-black "
-              />
-              <p className="mb-10 mt-3 block text-sm font-normal leading-5 text-lightbrown ">
-                Already have an account?{" "}
-                <Link href="/login">
-                  {" "}
-                  <span className="cursor-pointer font-medium text-[rgb(48,42,37)]  underline">
-                    Log In
-                  </span>
-                </Link>
-              </p>
-              <button
-                type="submit"
-                className="Button text-white font-bold h-14 rounded-3xl w-full px-8 "
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
+          Sign Up
+        </h1>
+        <form onSubmit={handleSubmit} className="flex flex-col">
+          <input
+            required
+            type="text"
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            required
+            type="text"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            required
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            required
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="mb-4 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p className="text-sm text-gray-600 mb-4">
+            Already have an account?{" "}
+            <Link href="/login">
+              <span className="text-blue-500 font-semibold underline cursor-pointer">
+                Log In
+              </span>
+            </Link>
+          </p>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg w-full hover:bg-blue-600 transition duration-300"
+          >
+            Sign Up
+          </button>
+        </form>
+        <div className="absolute top-4 left-4 flex items-center">
+          <Link href="/login">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white shadow-md cursor-pointer">
+              <svg
+                width="16"
+                height="13"
+                viewBox="0 0 16 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                Sign Up
-              </button>
-            </form>
-          </div>
-          <div className="absolute left-[-9rem] top-8  flex ">
-            <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border-[3px] border-darkbrown border-opacity-[0.1]">
-              <Link href="/login">
-                <svg
-                  width="16"
-                  height="13"
-                  viewBox="0 0 16 13"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1.54175 6.22868L14.0417 6.22868"
-                    stroke="#302A25"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M6.58325 11.2488L1.54159 6.22884L6.58325 1.20801"
-                    stroke="#302A25"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </Link>
+                <path
+                  d="M1.54175 6.22868L14.0417 6.22868"
+                  stroke="#302A25"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M6.58325 11.2488L1.54159 6.22884L6.58325 1.20801"
+                  stroke="#302A25"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
