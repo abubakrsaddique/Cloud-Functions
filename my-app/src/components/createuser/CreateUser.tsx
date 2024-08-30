@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 const USERS_QUERY_KEY = ["usersCreatedByAdmin"];
 
 const schema = z.object({
-  firstname: z.string().min(6, "First name must be at least 6 characters long"),
-  lastname: z.string().min(4, "Last name must be at least 4 characters long"),
+  firstname: z.string().min(2, "First name must be at least 2 characters long"),
+  lastname: z.string().min(2, "Last name must be at least 2 characters long"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
 });
