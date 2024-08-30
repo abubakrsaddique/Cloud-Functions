@@ -128,7 +128,7 @@ export default function SignupPage() {
           <button
             disabled={isSubmitting}
             type="submit"
-            className="bg-blue-500 items-center justify-center text-white font-bold py-3 px-6 rounded-lg w-full hover:bg-blue-600 transition duration-300"
+            className="bg-blue-500 flex items-center justify-center text-white font-bold py-3 px-6 rounded-lg w-full hover:bg-blue-600 transition duration-300"
           >
             {isSubmitting ? (
               <FaSpinner className="animate-spin mr-2" />
