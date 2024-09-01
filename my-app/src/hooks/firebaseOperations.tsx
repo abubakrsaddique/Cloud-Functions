@@ -14,6 +14,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
+  getAuth,
 } from "firebase/auth";
 
 export const fetchUser = async () => {

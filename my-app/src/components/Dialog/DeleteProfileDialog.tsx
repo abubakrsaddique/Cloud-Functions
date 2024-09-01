@@ -1,6 +1,7 @@
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -8,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/components/ui/dialog";
-import { Input } from "@/src/components/ui/input";
 
 export function DeleteProfileDialog() {
   return (
@@ -30,9 +30,11 @@ export function DeleteProfileDialog() {
         </DialogHeader>
 
         <DialogFooter>
-          <Button className="bg-gray-300 text-black px-4 py-2   hover:bg-blue-600">
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button className="bg-gray-300 text-black px-4 py-2 hover:bg-blue-600">
+              Cancel
+            </Button>
+          </DialogClose>
           <Button className="bg-red-500 text-white px-4 py-2  hover:bg-red-600">
             Delete
           </Button>
